@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+#  Assuming Homebrew installed,
+#  this script performs the following steps:
+#
+#   1. Installs brew bash shell
+#   2. Switches current user login shell to brew bash shell
+#
+#  Author: Igor P. Zenkov
+#
+
+declare BREW_BASH
+
+err()  { echo "$*" 1>&2; } 
+halt() { err "$@"; exit 1; }
+
+assert_macos() {
+  [[ "$OSTYPE"  == "darwin"* ]] || halt 'This script is only valid on Mac OS' 
+}
+
+assert_brew() {
+  brew -v > /dev/null 2>&1 || halt 'Homebrew is not installed, please install it first'
+}
+
+install_brew_bash() {
+  if [[ -f "$BREW_BASH" ]]; then
+    echo "$BREW_BASH is already installed"
+  else
+    echo "Installing $BREW_BASH ..."
+    brew install bash || halt 'Unable to install brew bash'
+  fi
+}
+
+update_private_shells() {
+  if grep "$BREW_BASH" /private/etc/shells > /dev/null; then
+    echo '/private/etc/shells is already updated'
+  else
+    echo 'Updating /private/etc/shells ...'
+    echo "$BREW_BASH" | sudo tee -a /private/etc/shells
+  fi
+}
+
+change_login_shell() {
+  if [[ "$SHELL" == "$BREW_BASH" ]]; then
+    echo "$BREW_BASH is already login shell for user $USER"
+  else
+    echo "Changing login shell to $BREW_BASH"
+    sudo chpass -s "$BREW_BASH" "$USER" || halt "Unable to change login shell for user $USER"
+  fi
+}
+
+main() {
+  assert_macos
+  assert_brew
+
+  BREW_BASH="$(brew --prefix)/bin/bash"
+
+  install_brew_bash
+  update_private_shells
+  change_login_shell
+} 
+
+main
