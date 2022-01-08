@@ -7,7 +7,8 @@
 #   2. Adds upgraded Bash shell to the list of login shells
 #   3. Switches current user login shell to upgraded Bash shell
 #
-#  Author: Igor P. Zenkov
+#  Author : Igor P. Zenkov
+#  Version: 1.0.1 Jan 1, 2022
 #
 
 declare BREW_BASH
