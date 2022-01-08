@@ -21,7 +21,7 @@ assert_macos() {
 }
 
 assert_brew() {
-  brew -v > /dev/null 2>&1 || halt 'Homebrew is not installed, please install it first'
+  brew -v > /dev/null 2>&1 || halt 'Homebrew (https://brew.sh) is not installed, please install it first'
 }
 
 install_brew_bash() {
