@@ -3,8 +3,9 @@
 #  Assuming Homebrew installed,
 #  this script performs the following steps:
 #
-#   1. Installs brew bash shell
-#   2. Switches current user login shell to brew bash shell
+#   1. Installs latest Homebrew Bash shell
+#   2. Adds upgraded Bash shell to the list of login shells
+#   3. Switches current user login shell to upgraded Bash shell
 #
 #  Author: Igor P. Zenkov
 #
@@ -15,7 +16,7 @@ err()  { echo "$*" 1>&2; }
 halt() { err "$@"; exit 1; }
 
 assert_macos() {
-  [[ "$OSTYPE"  == "darwin"* ]] || halt 'This script is only valid on Mac OS' 
+  [[ "$OSTYPE"  == "darwin"* ]] || halt 'This script is only valid on macOS'
 }
 
 assert_brew() {
